@@ -1,103 +1,61 @@
-const games = {
-  mlbb:{name:"Mobile Legends",currency:"Diamonds",icon:"💎",short:"MLBB",glow:"#6c5ce7",popular:true,
-    fields:[["playerId","Player ID","Enter your Player ID"],["zoneId","Zone / Server ID","Enter your Zone ID"]],
-    packages:[["86 Diamonds",86,0.99,""],["172 Diamonds",172,1.89,"+5%"],["257 Diamonds",257,2.79,"+8%"],["344 Diamonds",344,3.69,"+10%"],["429 Diamonds",429,4.49,"+12%"],["514 Diamonds",514,5.29,"+15%"]]},
-  ff:{name:"Free Fire",currency:"Diamonds",icon:"🔥",short:"FREE FIRE",glow:"#ff7a18",popular:true,
-    fields:[["playerId","Player ID","Enter your Player ID"]],
-    packages:[["100 Diamonds",100,0.99,""],["310 Diamonds",310,2.79,"+5%"],["520 Diamonds",520,4.49,"+8%"],["1060 Diamonds",1060,8.99,"+10%"],["2180 Diamonds",2180,17.49,"+12%"],["5600 Diamonds",5600,42.99,"+15%"]]},
-  pubg:{name:"PUBG Mobile",currency:"UC",icon:"🎯",short:"PUBG",glow:"#f2c94c",popular:false,
-    fields:[["playerId","Player ID","Enter your PUBG Player ID"]],
-    packages:[["60 UC",60,0.99,""],["325 UC",325,4.79,"+5%"],["660 UC",660,9.49,"+8%"],["1800 UC",1800,24.99,"+10%"],["3850 UC",3850,49.99,"+12%"],["8100 UC",8100,99.99,"+15%"]]},
-  blood:{name:"Blood Strike",currency:"Credits",icon:"⚔️",short:"BLOOD STRIKE",glow:"#ff4d67",popular:false,
-    fields:[["playerId","Player ID","Enter your Player ID"]],
-    packages:[["100 Credits",100,0.99,""],["300 Credits",300,2.79,"+5%"],["500 Credits",500,4.49,"+8%"],["1050 Credits",1050,8.99,"+10%"],["2200 Credits",2200,17.49,"+12%"],["5600 Credits",5600,42.99,"+15%"]]}
-};
-let state={game:"mlbb",package:null,discount:0};
+const games=[
+  {id:"ml",name:"Mobile Legends",currency:"Diamonds",zone:true,icon:"💎",art:"linear-gradient(120deg,#043a68,#0c143a)",packages:[["86 Diamonds",1,"+12 Bonus"],["172 Diamonds",2,"+25 Bonus"],["257 Diamonds",3,"+45 Bonus"],["514 Diamonds",6,"+100 Bonus"]]},
+  {id:"ff",name:"Free Fire",currency:"Diamonds",zone:false,icon:"💎",art:"linear-gradient(120deg,#5a250c,#27143e)",packages:[["100 Diamonds",1.2,"+10 Bonus"],["310 Diamonds",3.5,"+35 Bonus"],["520 Diamonds",5.8,"+65 Bonus"],["1060 Diamonds",11,"+130 Bonus"]]},
+  {id:"pubg",name:"PUBG Mobile",currency:"UC",zone:false,icon:"UC",art:"linear-gradient(120deg,#43505a,#101b2e)",packages:[["60 UC",1,""],["325 UC",5,""],["660 UC",10,""],["1800 UC",25,""]]},
+  {id:"bs",name:"Blood Strike",currency:"Gold / Credits",zone:false,icon:"◉",art:"linear-gradient(120deg,#57131e,#17132d)",packages:[["100 Gold",1,""],["300 Gold",3,""],["680 Gold",6,""],["1380 Gold",12,""]]}
+];
+let state={game:0,package:0,method:"KHQR"};
+const stock={};
 
-const $=id=>document.getElementById(id);
-function money(n){return "$"+n.toFixed(2)}
+games.forEach((g,gi)=>g.packages.forEach((_,pi)=>stock[`${gi}-${pi}`]=[42,18,7,31,12,3,26,15][gi*2+pi%2]||18));
+
+const $=s=>document.querySelector(s);
+const money=n=>"$"+Number(n).toFixed(2);
+function showToast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>t.classList.remove("show"),2200)}
+function current(){return games[state.game]}
 function renderGames(){
-  $("gamesGrid").innerHTML=Object.entries(games).map(([id,g])=>`
-    <article class="game-card" style="--glow:${g.glow}" data-game="${id}">
-      ${g.popular?'<span class="badge">POPULAR</span>':''}
-      <div class="game-art">${g.short}</div><div class="game-icon">${g.icon}</div>
-      <h3>${g.name}</h3><p>Top up with ${g.currency}</p>
-      <button class="primary-btn small" onclick="selectGame('${id}')">Top Up Now →</button>
-    </article>`).join("");
-}
-function renderGameSelect(){
-  $("gameSelect").innerHTML=Object.entries(games).map(([id,g])=>`<option value="${id}">${g.name} — ${g.currency}</option>`).join("");
-  $("gameSelect").value=state.game;
-}
-function renderFields(){
-  const g=games[state.game];
-  $("dynamicFields").innerHTML=g.fields.map(([id,label,placeholder])=>`
-    <div class="field"><label for="${id}">${label}</label><input id="${id}" placeholder="${placeholder}" autocomplete="off"></div>`).join("");
-  Object.values(games[state.game].fields).forEach(()=>{});
-  updateSummary();
+  $("#gameGrid").innerHTML=games.map((g,i)=>`<article class="game-card" data-game="${g.name.toLowerCase()}" style="--art:${g.art}"><span class="tag">${i===0?"Popular":"Top Up"}</span><h3>${g.icon} ${g.name}</h3><p>${g.currency}</p><button class="gradient-btn" onclick="chooseGame(${i})">Top Up Now →</button></article>`).join("");
+  $("#gameTabs").innerHTML=games.map((g,i)=>`<button class="${i===state.game?"active":""}" onclick="chooseGame(${i})">${g.icon} ${g.name}</button>`).join("");
 }
 function renderPackages(){
-  const g=games[state.game];
-  $("packages").innerHTML=g.packages.map((p,i)=>`
-    <button class="package ${state.package===i?'selected':''}" onclick="selectPackage(${i})">
-      ${p[3]?`<span class="bonus">${p[3]} BONUS</span>`:""}<span class="amount">${p[0]}</span>
-      <small>${p[1].toLocaleString()} ${g.currency}</small><span class="price">${money(p[2])}</span>
-    </button>`).join("");
-}
-function selectGame(id){
-  state.game=id; state.package=null; $("gameSelect").value=id; renderFields(); renderPackages(); scrollToTopup();
-}
-function selectPackage(i){state.package=i;renderPackages();updateSummary()}
-function playerValue(){
-  const ids=games[state.game].fields.map(x=>x[0]);
-  return ids.map(id=>$(id)?.value.trim()).filter(Boolean).join(" / ") || "—";
+  const g=current();
+  $("#packageGrid").innerHTML=g.packages.map((p,i)=>`<div class="package ${i===state.package?"active":""}"><strong>${p[0]}</strong>${p[2]?`<small>${p[2]}</small>`:"<small>Standard package</small>"}<b>${money(p[1])}</b><button onclick="choosePackage(${i})">${i===state.package?"Selected":"Select"}</button></div>`).join("");
+  $("#zoneWrap").style.display=g.zone?"block":"none";
+  updateSummary();
 }
 function updateSummary(){
-  const g=games[state.game], p=state.package===null?null:g.packages[state.package];
-  $("sumGame").textContent=g.name;$("sumPlayer").textContent=playerValue();
-  $("sumPackage").textContent=p?p[0]:"—";const price=p?p[2]:0;state.discount=p?Math.min(.20, state.package===0?0:0.05):0;
-  $("sumPrice").textContent=money(price);$("sumDiscount").textContent="-"+money(price*state.discount);$("sumTotal").textContent=money(price*(1-state.discount));
+  const g=current(),p=g.packages[state.package];
+  const player=$("#playerId").value.trim()||"—",zone=$("#zoneId").value.trim()||"—";
+  const discount=p[1]>=5?p[1]*.10:0,total=p[1]-discount;
+  $("#sumGame").textContent=g.name;$("#sumPlayer").textContent=player;$("#sumZone").textContent=g.zone?zone:"—";$("#sumPackage").textContent=p[0];$("#sumPrice").textContent=money(p[1]);$("#sumDiscount").textContent="-"+money(discount);$("#sumTotal").textContent=money(total);$("#miniAmount").textContent=money(total);
 }
-function scrollToTopup(){document.querySelector("#topup").scrollIntoView({behavior:"smooth"})}
-function toast(msg){$("toast").textContent=msg;$("toast").classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>$("toast").classList.remove("show"),2600)}
-function openModal(){
-  const g=games[state.game],p=state.package===null?null:g.packages[state.package];
-  if(!p){toast("Please select a package first.");return}
-  const player=playerValue();if(player==="—"){toast("Please enter your Player ID.");return}
-  $("modalOrder").innerHTML=`<b>${g.name}</b><br>Player: ${player}<br>${p[0]} • Total: <b>${money(p[2]*(1-state.discount))}</b>`;
-  $("modal").classList.remove("hidden");
+function chooseGame(i){state.game=i;state.package=0;renderGames();renderPackages();document.querySelector("#topup").scrollIntoView({behavior:"smooth"});}
+function choosePackage(i){state.package=i;renderPackages();}
+function renderStock(){
+  $("#stockGrid").innerHTML=games.map((g,gi)=>g.packages.map((p,pi)=>{let n=stock[`${gi}-${pi}`];let cls=n===0?"out":n<10?"low":"ok";let status=n===0?"Out of Stock":n<10?"Low Stock":"In Stock";return `<article class="stock-card"><h3>${g.icon} ${g.name}</h3><p>${p[0]} · ${money(p[1])}</p><div class="stock-number"><span>Available</span><b>${n}</b></div><div class="bar"><div class="fill" style="width:${Math.min(100,n*2)}%"></div></div><span class="stock-status ${cls}">${status}</span></article>`}).join("")).join("");
 }
-function demoLink(e){e.preventDefault();toast("Demo link — replace with your verified business account.")}
-window.scrollToTopup=scrollToTopup;window.selectGame=selectGame;window.selectPackage=selectPackage;window.demoLink=demoLink;
+function openCheckout(){
+  const g=current(),p=g.packages[state.package],player=$("#playerId").value.trim(),zone=$("#zoneId").value.trim();
+  if(!player||g.zone&&!zone){showToast("Please enter the required player information.");return}
+  const discount=p[1]>=5?p[1]*.10:0,total=p[1]-discount;
+  const order="DT-"+Date.now().toString().slice(-9);
+  $("#modalOrder").textContent=order;$("#modalGame").textContent=g.name;$("#modalPlayer").textContent=player;$("#modalPackage").textContent=p[0];$("#modalAmount").textContent=money(total);
+  $("#miniOrder").textContent=order;$("#miniAmount").textContent=money(total);
+  $("#checkoutModal").classList.add("show");
+}
+function closeCheckout(){$("#checkoutModal").classList.remove("show")}
+function scrollToTopup(){$("#topup").scrollIntoView({behavior:"smooth"})}
 
-window.addEventListener("load",()=>setTimeout(()=>$("loader").classList.add("hide"),450));
-$("year").textContent=new Date().getFullYear();
-renderGames();renderGameSelect();renderFields();renderPackages();
-$("gameSelect").addEventListener("change",e=>selectGame(e.target.value));
-$("dynamicFields").addEventListener("input",updateSummary);
-$("checkoutBtn").addEventListener("click",openModal);
-$("modalClose").addEventListener("click",()=>$("modal").classList.add("hidden"));
-$("modal").addEventListener("click",e=>{if(e.target.id==="modal")$("modal").classList.add("hidden")});
-$("demoPayBtn").addEventListener("click",()=>{
-  const id="DT-"+new Date().toISOString().slice(0,10).replaceAll("-","")+"-"+Math.floor(1000+Math.random()*9000);
-  localStorage.setItem("diamondTopupDemoOrder",JSON.stringify({id,game:games[state.game].name,player:playerValue(),created:Date.now(),status:"Processing"}));
-  $("modal").classList.add("hidden");$("trackInput").value=id;toast("Demo order created: "+id);document.querySelector("#tracking").scrollIntoView({behavior:"smooth"});
-});
-$("trackBtn").addEventListener("click",()=>{
-  const id=$("trackInput").value.trim(),saved=JSON.parse(localStorage.getItem("diamondTopupDemoOrder")||"null");
-  if(!id){toast("Enter an Order ID.");return}
-  const ok=saved&&saved.id===id;
-  $("trackResult").classList.remove("hidden");
-  $("trackResult").innerHTML=ok?`Order <b>${saved.id}</b> • ${saved.game} • Player ${saved.player} • Status: <strong>${saved.status}</strong>`:`Demo order <b>${id}</b> not found. Create a demo order from checkout first.`;
-});
-$("menuBtn").addEventListener("click",()=>$("navLinks").classList.toggle("open"));
-$("searchBtn").addEventListener("click",()=>{const q=prompt("Search games:");if(!q)return;const found=Object.entries(games).find(([_,g])=>g.name.toLowerCase().includes(q.toLowerCase()));found?selectGame(found[0]):toast("Game not found.")});
-$("allGamesBtn").addEventListener("click",()=>toast("All four games are currently shown."));
-$("loginBtn").addEventListener("click",()=>toast("Demo login — connect your authentication backend."));
-$("registerBtn").addEventListener("click",()=>toast("Demo registration — connect your authentication backend."));
-document.querySelectorAll(".faq button").forEach(btn=>btn.addEventListener("click",()=>{
-  const panel=btn.nextElementSibling,open=panel.classList.contains("open");
-  document.querySelectorAll(".faq div").forEach(x=>x.classList.remove("open"));document.querySelectorAll(".faq button span").forEach(x=>x.textContent="+");
-  if(!open){panel.classList.add("open");btn.querySelector("span").textContent="−"}
-}));
-$("contactForm").addEventListener("submit",e=>{e.preventDefault();e.target.reset();toast("Message saved as a demo submission.")});
+renderGames();renderPackages();renderStock();
+$("#playerId").addEventListener("input",updateSummary);$("#zoneId").addEventListener("input",updateSummary);
+$("#checkoutBtn").addEventListener("click",openCheckout);$("#closeModal").addEventListener("click",closeCheckout);
+$("#checkoutModal").addEventListener("click",e=>{if(e.target.id==="checkoutModal")closeCheckout()});
+document.querySelectorAll(".pay").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".pay").forEach(x=>x.classList.remove("active"));b.classList.add("active");state.method=b.dataset.method;showToast(state.method+" selected")}));
+$("#modalPayments").innerHTML=["KHQR","ABA Pay","Card","Wing","TrueMoney","USDT"].map(x=>`<button class="${x==="KHQR"?"active":""}">${x}</button>`).join("");
+document.querySelectorAll(".faq").forEach(f=>f.addEventListener("click",()=>f.classList.toggle("open")));
+$("#refreshStock").addEventListener("click",()=>{Object.keys(stock).forEach(k=>stock[k]=Math.floor(Math.random()*50));renderStock();showToast("Demo stock refreshed.")});
+$("#trackBtn").addEventListener("click",()=>{let id=$("#trackInput").value.trim()||"DT-DEMO-0001";$("#trackResult").textContent=`✓ ${id}: Payment Pending → Processing → Completed (demo tracking).`});
+$("#searchInput").addEventListener("input",e=>{let q=e.target.value.toLowerCase();document.querySelectorAll(".game-card").forEach(c=>c.style.display=c.dataset.game.includes(q)?"":"none")});
+$("#menuBtn").addEventListener("click",()=>$("#mainNav").classList.toggle("open"));
+document.querySelectorAll(".side-tab").forEach(b=>b.addEventListener("click",()=>document.getElementById(b.dataset.target)?.scrollIntoView({behavior:"smooth"})));
+$("#paidBtn").addEventListener("click",()=>{closeCheckout();showToast("Demo payment received. Order is now processing.");});
