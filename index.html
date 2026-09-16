@@ -1,222 +1,124 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="CBOY TOPU - fast and secure game top-up for Mobile Legends, Free Fire, PUBG Mobile and Blood Strike.">
-  <title>CBOY TOPU — Game Top-Up</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="C-Boy Store — Cambodian gaming and digital top-up store.">
+  <title>C-Boy Store | Fast & Trusted Game Top-Up</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="bg-overlay"></div>
+  <div id="particles" aria-hidden="true"></div>
 
-  <header class="navbar">
-    <a class="brand" href="#home">
-      <span class="brand-gem">◆</span>
-      <span><b>CBOY</b><strong>TOPUP</strong><small>Top Up • Play • Win</small></span>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="C-Boy Store home">
+      <span class="brand-mark">CB</span>
+      <span><b>C-Boy</b><small>STORE</small></span>
     </a>
-
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu">☰</button>
     <nav id="mainNav">
-      <a class="active" href="#home">Home</a>
-      <a href="#games">Games</a>
-      <a href="#how">How It Works</a>
-      <a href="#promotions">Promotions</a>
-      <a href="#stock">Stock</a>
-      <a href="#faq">FAQ</a>
-      <a href="#contact">Contact</a>
+      <a href="#home">Home</a><a href="#games">Games</a><a href="#services">Digital Services</a>
+      <a href="#promotions">Promotions</a><a href="#how">How to Buy</a><a href="#payment">KHQR Payment</a><a href="#orders">Check Order</a><a href="#contact">Contact</a>
     </nav>
-
-    <div class="nav-actions">
-      <label class="search">
-        <span>⌕</span>
-        <input id="searchInput" type="search" placeholder="Search games...">
-      </label>
-      <button class="outline-btn" onclick="showToast('Demo login button')">Login</button>
-      <button class="gradient-btn" onclick="showToast('Demo registration button')">Register</button>
-      <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+    <div class="header-actions">
+      <button class="icon-btn" id="themeToggle" title="Toggle theme">☀</button>
+      <button class="cart-btn" id="cartOpen">Cart <span id="cartCount">0</span></button>
     </div>
   </header>
 
   <main>
-    <section class="hero section" id="home">
-      <div class="hero-copy">
-        <div class="eyebrow">⚡ TOP UP YOUR FAVORITE GAMES</div>
-        <h1>Fast &amp; Secure<br>Game <span>Top-Up</span></h1>
-        <p>Top up your favorite games instantly at great prices.<br>Play more. Win more.</p>
-        <div class="hero-buttons">
-          <button class="gradient-btn large" onclick="scrollToTopup()">⚡ Top Up Now</button>
-          <a class="outline-btn large" href="#games">🎮 View Games</a>
-        </div>
-        <div class="trust-row">
-          <div><i>⚡</i><span><b>Instant Delivery</b><small>Get your top-up in minutes</small></span></div>
-          <div><i>◉</i><span><b>Secure Payment</b><small>Your data is safe with us</small></span></div>
-          <div><i>♧</i><span><b>24/7 Support</b><small>We're always here to help</small></span></div>
-        </div>
+    <section class="hero" id="home">
+      <div class="hero-bg"></div><div class="hero-grid"></div>
+      <div class="hero-content">
+        <div class="eyebrow"><span class="khmer-flag"></span> CAMBODIAN GAMING & DIGITAL STORE</div>
+        <h1>C-Boy Store</h1>
+        <h2>Fast &amp; Trusted <span>Game Top-Up</span></h2>
+        <p>Top up your favorite games and digital services quickly and securely.</p>
+        <div class="hero-actions"><a class="btn primary" href="#games">Top Up Now ↗</a><a class="btn ghost" href="#products">View Products</a></div>
+        <div class="trust-row"><span>⚡ Instant Demo Flow</span><span>🔒 Secure Checkout</span><span>🇰🇭 KHR Pricing</span></div>
       </div>
-      <div class="heritage">
-        <span>Angkor Wat</span>
-        <small>CAMBODIA</small>
-        <em>OUR HERITAGE • OUR PRIDE</em>
+      <div class="temple-card">
+        <span>ANGKOR</span><strong>WAT</strong><small>KHMER KINGDOM • CAMBODIA</small>
       </div>
     </section>
 
-    <section class="section content-section" id="games">
+    <section class="section" id="products">
+      <div class="section-head"><div><span class="eyebrow">STORE CATALOG</span><h2>Choose your <span>top-up</span></h2></div>
+        <div class="controls"><input id="search" type="search" placeholder="Search products…" aria-label="Search products"><select id="filter"><option value="all">All products</option><option value="games">Games</option><option value="services">Digital Services</option></select></div>
+      </div>
+      <div class="product-grid" id="productGrid"></div>
+    </section>
+
+    <section class="promo section" id="promotions">
+      <div class="promo-main"><span class="eyebrow">LIMITED DEALS</span><h2>Power up. <span>Pay less.</span></h2><p>Demo promotions are editable in <code>script.js</code>.</p><a class="btn primary" href="#products">Explore Deals</a></div>
+      <div class="promo-ticket"><small>FLASH DEAL</small><strong>UP TO 15%</strong><span>SELECTED PACKAGES</span><b>CB•2026</b></div>
+    </section>
+
+    <section class="section" id="how">
+      <div class="section-head"><div><span class="eyebrow">SIMPLE CHECKOUT</span><h2>How to <span>buy</span></h2></div></div>
+      <div class="steps">
+        <article><b>01</b><h3>Pick a package</h3><p>Select a game/service and the amount you need.</p></article>
+        <article><b>02</b><h3>Enter account ID</h3><p>Provide only the information required for delivery.</p></article>
+        <article><b>03</b><h3>Pay by QR</h3><p>Use the store's configured Cambodian QR payment.</p></article>
+        <article><b>04</b><h3>Track your order</h3><p>Save your Order ID and check its demo status anytime.</p></article>
+      </div>
+    </section>
+
+
+    <section class="section" id="payment">
       <div class="section-head">
-        <div>
-          <h2>🎮 Popular Games</h2>
-          <p>Top up your favorite games and get ahead in your journey!</p>
-        </div>
-        <a href="#topup">View All Games →</a>
+        <div><span class="eyebrow">CAMBODIAN PAYMENT</span><h2>Pay with <span>KHQR</span></h2></div>
       </div>
-      <div class="game-grid" id="gameGrid"></div>
-    </section>
-
-    <section class="dashboard section" id="topup">
-      <aside class="side-tabs">
-        <button class="side-tab active" data-target="orderPanel">↯ <span>Top Up</span></button>
-        <button class="side-tab" data-target="stock">◇ <span>Stock</span></button>
-        <button class="side-tab" data-target="tracking">⌖ <span>Order Tracking</span></button>
-      </aside>
-
-      <div class="order-panel panel" id="orderPanel">
-        <div class="panel-title">🎯 <span>Top Up Order<small>Select your game and package to get started</small></span></div>
-        <div class="game-tabs" id="gameTabs"></div>
-
-        <div class="form-grid">
-          <div class="form-block">
-            <h3>1. Enter Player Information</h3>
-            <label>Player ID <b>*</b><input id="playerId" placeholder="Enter your player ID"></label>
-            <label id="zoneWrap">Zone / Server ID <b>*</b><input id="zoneId" placeholder="Enter your zone/server ID"></label>
-          </div>
-          <div class="form-block">
-            <h3>2. Select Package</h3>
-            <div class="package-grid" id="packageGrid"></div>
-          </div>
+      <div class="khqr-payment-card">
+        <div class="khqr-copy">
+          <span class="khqr-badge">KHQR</span>
+          <h3>Scan to Pay</h3>
+          <p>Open your Cambodian banking app and scan the QR code to pay.</p>
+          <div class="khqr-note">Replace <code>images/khqr.jpg</code> with your real KHQR image before launch.</div>
+        </div>
+        <div class="khqr-image-wrap">
+          <img src="images/khqr.jpg" alt="KHQR payment QR code">
         </div>
       </div>
-
-      <aside class="summary panel">
-        <div class="panel-title">🛒 <span>Order Summary</span></div>
-        <div class="summary-lines">
-          <p><span>Game</span><b id="sumGame">Mobile Legends</b></p>
-          <p><span>Player ID</span><b id="sumPlayer">—</b></p>
-          <p><span>Zone / Server ID</span><b id="sumZone">—</b></p>
-          <p><span>Package</span><b id="sumPackage">86 Diamonds</b></p>
-          <p><span>Quantity</span><b>1</b></p>
-          <p><span>Price</span><b id="sumPrice">$1.00</b></p>
-          <p><span>Discount</span><b class="discount" id="sumDiscount">-$0.00</b></p>
-        </div>
-        <div class="total"><span>Total</span><strong id="sumTotal">$1.00</strong></div>
-        <button class="gradient-btn wide" id="checkoutBtn">Proceed to Payment →</button>
-      </aside>
-
-      <aside class="payment panel">
-        <div class="panel-title">▣ <span>Payment Method<small>Choose your preferred payment method</small></span></div>
-        <div class="pay-grid">
-          <button class="pay active" data-method="KHQR">▣<span>KHQR</span></button>
-          <button class="pay" data-method="ABA Pay">ABA<span>ABA Pay</span></button>
-          <button class="pay" data-method="Card">▱<span>Credit/Debit Card</span></button>
-          <button class="pay" data-method="Wing">W<span>Wing</span></button>
-          <button class="pay" data-method="TrueMoney">♥<span>TrueMoney</span></button>
-          <button class="pay" data-method="USDT">₮<span>USDT</span></button>
-        </div>
-        <div class="qr-mini">
-          <div class="qr-head"><b>◉ Scan to Pay (KHQR)</b><small>DEMO</small></div>
-          <img src="assets/aba-khqr-demo.jpg" alt="Demo KHQR payment QR">
-          <div><b>Order ID</b><span id="miniOrder">DT-DEMO-0001</span><b>Amount</b><strong id="miniAmount">$1.00</strong></div>
-        </div>
-        <small class="warning">ⓘ Demo QR only. Replace with your verified merchant QR/payment API before going live.</small>
-      </aside>
     </section>
 
-    <section class="section stock-section" id="stock">
-      <div class="section-head">
-        <div><h2>📦 Game Stock</h2><p>Demo package inventory with low-stock indicators.</p></div>
-        <button class="outline-btn" id="refreshStock">↻ Refresh Stock</button>
-      </div>
-      <div class="stock-grid" id="stockGrid"></div>
-    </section>
-
-    <section class="section promo-section" id="promotions">
-      <div class="section-head"><div><h2>🎁 Promotions</h2><p>Special offers for your next top-up.</p></div><a href="#promotions">View All →</a></div>
-      <div class="promo-grid">
-        <article><span>FIRST TOP-UP BONUS</span><h3>Get 20% Extra Diamonds</h3><p>New player rewards.</p></article>
-        <article><span>WEEKEND DISCOUNT</span><h3>Up to 50% Off</h3><p>Selected packages.</p></article>
-        <article><span>VIP CUSTOMER REWARDS</span><h3>Exclusive Benefits</h3><p>More value for frequent players.</p></article>
-      </div>
-    </section>
-
-    <section class="section info-grid" id="how">
-      <article class="info-card"><b>01</b><h3>Select Game</h3><p>Choose your favorite game and enter the correct player information.</p></article>
-      <article class="info-card"><b>02</b><h3>Select Package</h3><p>Pick the diamonds, UC, credits or other available package.</p></article>
-      <article class="info-card"><b>03</b><h3>Pay Securely</h3><p>Choose a payment method and complete the demo checkout flow.</p></article>
-      <article class="info-card"><b>04</b><h3>Receive Top-Up</h3><p>In production, your provider/backend can verify payment and fulfill the order.</p></article>
-    </section>
-
-    <section class="section tracking-section" id="tracking">
-      <div class="section-head"><div><h2>⌖ Track Your Order</h2><p>Enter a demo order ID to view its status.</p></div></div>
-      <div class="track-box">
-        <input id="trackInput" placeholder="e.g. DT-20250915-001">
-        <button class="gradient-btn" id="trackBtn">Track Order</button>
-        <div class="track-result" id="trackResult"></div>
-      </div>
-    </section>
-
-    <section class="section faq-section" id="faq">
-      <div class="section-head"><div><h2>❓ FAQ</h2><p>Common questions about game top-ups.</p></div></div>
-      <div class="faq-list">
-        <button class="faq"><span>How long does a top-up take?</span><b>+</b></button>
-        <div class="faq-answer">A real provider integration can fulfill orders within minutes after payment is verified.</div>
-        <button class="faq"><span>Do I need my game password?</span><b>+</b></button>
-        <div class="faq-answer">No. A proper top-up flow normally requires only the player/account identifiers needed by the provider.</div>
-        <button class="faq"><span>Is the QR code real?</span><b>+</b></button>
-        <div class="faq-answer">This template displays the uploaded QR image as a visual demo. Connect a verified merchant KHQR/payment API before accepting real payments.</div>
-        <button class="faq"><span>Can I add more games?</span><b>+</b></button>
-        <div class="faq-answer">Yes. Add another game object in script.js with its packages and player-field configuration.</div>
+    <section class="section" id="orders">
+      <div class="order-check">
+        <div><span class="eyebrow">ORDER TRACKER</span><h2>Check <span>Order Status</span></h2><p>Enter an Order ID generated by this demo.</p></div>
+        <form id="orderForm"><input id="orderId" required placeholder="e.g. CB-AB12CD34" autocomplete="off"><button class="btn primary">Check Status</button></form>
+        <div id="orderResult" class="order-result"></div>
       </div>
     </section>
 
     <section class="section contact" id="contact">
-      <div><h2>Need Help?</h2><p>Contact support for order questions or integration assistance.</p></div>
-      <button class="gradient-btn" onclick="showToast('Support request demo submitted')">Contact Support</button>
+      <div><span class="eyebrow">NEED HELP?</span><h2>Contact <span>C-Boy Store</span></h2><p>Replace these placeholders with your real store channels before launch.</p></div>
+      <div class="contact-grid">
+        <a href="#" class="contact-card">✈️ <b>Telegram</b><small>@your_store</small></a>
+        <a href="#" class="contact-card">f <b>Facebook</b><small>C-Boy Store</small></a>
+        <a href="#" class="contact-card">◉ <b>WhatsApp</b><small>+855 XX XXX XXX</small></a>
+        <a href="#" class="contact-card">☎ <b>Phone</b><small>+855 XX XXX XXX</small></a>
+      </div>
     </section>
   </main>
 
-  <footer>
-    <div class="footer-brand"><span class="brand-gem">◆</span><b>Diamond<span>TopUp</span></b><small>Top Up • Play • Win</small><p>Your trusted game top-up platform. Fast, secure and affordable.</p></div>
-    <div><h4>Quick Links</h4><a href="#home">Home</a><a href="#games">Games</a><a href="#how">How It Works</a><a href="#promotions">Promotions</a></div>
-    <div><h4>Games</h4><a href="#games">Mobile Legends</a><a href="#games">Free Fire</a><a href="#games">PUBG Mobile</a><a href="#games">Blood Strike</a></div>
-    <div><h4>Support</h4><a href="#faq">FAQ</a><a href="#contact">Contact Us</a><a href="#">Privacy Policy</a><a href="#">Refund Policy</a></div>
-    <div><h4>Payment Methods</h4><div class="footer-pay">KHQR · ABA · VISA · Wing · USDT</div></div>
-    <div class="copyright">© 2026 DiamondTopUp. Demo website. Play Smart. Top Up Safe.</div>
-  </footer>
+  <footer><div class="brand"><span class="brand-mark">CB</span><span><b>C-Boy</b><small>STORE</small></span></div><p>© 2026 C-Boy Store. Demo storefront — configure real payment and fulfillment systems before production.</p></footer>
 
-  <div class="modal" id="checkoutModal">
-    <div class="modal-card">
-      <button class="close" id="closeModal">×</button>
-      <h2>Complete Your Payment</h2>
-      <div class="modal-payments" id="modalPayments"></div>
-      <div class="modal-body">
-        <div class="big-qr">
-          <h3>KHQR <small>DEMO</small></h3>
-          <img src="assets/aba-khqr-demo.jpg" alt="Uploaded KHQR demo">
-        </div>
-        <div class="modal-details">
-          <p><span>Order ID</span><b id="modalOrder">DT-DEMO-0001</b></p>
-          <p><span>Game</span><b id="modalGame">Mobile Legends</b></p>
-          <p><span>Player ID</span><b id="modalPlayer">—</b></p>
-          <p><span>Package</span><b id="modalPackage">86 Diamonds</b></p>
-          <p><span>Amount</span><strong id="modalAmount">$1.00</strong></p>
-          <button class="gradient-btn wide" id="paidBtn">I've Paid — Demo</button>
-          <small class="warning">For real payments, use your merchant's verified KHQR payload/API instead of a static image.</small>
-        </div>
-      </div>
+  <div class="modal" id="checkoutModal" aria-hidden="true">
+    <div class="modal-panel">
+      <button class="close" id="checkoutClose" aria-label="Close">×</button>
+      <div id="checkoutBody"></div>
     </div>
   </div>
 
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+    <div class="drawer-head"><h2>Your Cart</h2><button class="close" id="cartClose">×</button></div>
+    <div id="cartItems"></div>
+    <div class="cart-foot"><div><span>Total</span><strong id="cartTotal">0 KHR</strong></div><button class="btn primary full" id="checkoutCart">Checkout</button></div>
+  </aside>
+  <div class="overlay" id="overlay"></div>
   <div class="toast" id="toast"></div>
   <script src="script.js"></script>
 </body>

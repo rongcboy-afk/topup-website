@@ -1,61 +1,86 @@
-const games=[
-  {id:"ml",name:"Mobile Legends",currency:"Diamonds",zone:true,icon:"💎",art:"linear-gradient(120deg,#043a68,#0c143a)",packages:[["86 Diamonds",1,"+12 Bonus"],["172 Diamonds",2,"+25 Bonus"],["257 Diamonds",3,"+45 Bonus"],["514 Diamonds",6,"+100 Bonus"]]},
-  {id:"ff",name:"Free Fire",currency:"Diamonds",zone:false,icon:"💎",art:"linear-gradient(120deg,#5a250c,#27143e)",packages:[["100 Diamonds",1.2,"+10 Bonus"],["310 Diamonds",3.5,"+35 Bonus"],["520 Diamonds",5.8,"+65 Bonus"],["1060 Diamonds",11,"+130 Bonus"]]},
-  {id:"pubg",name:"PUBG Mobile",currency:"UC",zone:false,icon:"UC",art:"linear-gradient(120deg,#43505a,#101b2e)",packages:[["60 UC",1,""],["325 UC",5,""],["660 UC",10,""],["1800 UC",25,""]]},
-  {id:"bs",name:"Blood Strike",currency:"Gold / Credits",zone:false,icon:"◉",art:"linear-gradient(120deg,#57131e,#17132d)",packages:[["100 Gold",1,""],["300 Gold",3,""],["680 Gold",6,""],["1380 Gold",12,""]]}
+const products=[
+{id:"mlbb",name:"Mobile Legends",short:"MLBB",category:"games",unit:"Diamonds",icon:"ML",stock:"in",badge:"POPULAR",packages:[["86 Diamonds",1800],["172 Diamonds",3500],["257 Diamonds",5000],["706 Diamonds",13000]]},
+{id:"freefire",name:"Free Fire",short:"FF",category:"games",unit:"Diamonds",icon:"FF",stock:"in",badge:"HOT",packages:[["100 Diamonds",2200],["310 Diamonds",6500],["520 Diamonds",10500],["1060 Diamonds",20500]]},
+{id:"pubg",name:"PUBG Mobile",short:"PUBG",category:"games",unit:"UC",icon:"UC",stock:"low",badge:"DEAL",packages:[["60 UC",2500],["325 UC",12500],["660 UC",24000],["1800 UC",61000]]},
+{id:"bloodstrike",name:"Blood Strike",short:"BS",category:"games",unit:"Gold",icon:"BS",stock:"in",badge:"NEW",packages:[["100 Gold",2000],["310 Gold",5800],["650 Gold",11500],["1350 Gold",22500]]},
+{id:"capcut",name:"CapCut Pro",short:"CC",category:"services",unit:"Subscription",icon:"PRO",stock:"in",badge:"PRO",packages:[["1 Month",4500],["3 Months",12000],["6 Months",22000],["12 Months",39000]]},
+{id:"youtuber",name:"YouTuber Pro",short:"YT",category:"services",unit:"Digital Service",icon:"YT",stock:"low",badge:"CREATOR",packages:[["Starter",15000],["Growth",30000],["Creator",55000],["Pro",95000]]}
 ];
-let state={game:0,package:0,method:"KHQR"};
-const stock={};
-
-games.forEach((g,gi)=>g.packages.forEach((_,pi)=>stock[`${gi}-${pi}`]=[42,18,7,31,12,3,26,15][gi*2+pi%2]||18));
 
 const $=s=>document.querySelector(s);
-const money=n=>"$"+Number(n).toFixed(2);
-function showToast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>t.classList.remove("show"),2200)}
-function current(){return games[state.game]}
-function renderGames(){
-  $("#gameGrid").innerHTML=games.map((g,i)=>`<article class="game-card" data-game="${g.name.toLowerCase()}" style="--art:${g.art}"><span class="tag">${i===0?"Popular":"Top Up"}</span><h3>${g.icon} ${g.name}</h3><p>${g.currency}</p><button class="gradient-btn" onclick="chooseGame(${i})">Top Up Now →</button></article>`).join("");
-  $("#gameTabs").innerHTML=games.map((g,i)=>`<button class="${i===state.game?"active":""}" onclick="chooseGame(${i})">${g.icon} ${g.name}</button>`).join("");
-}
-function renderPackages(){
-  const g=current();
-  $("#packageGrid").innerHTML=g.packages.map((p,i)=>`<div class="package ${i===state.package?"active":""}"><strong>${p[0]}</strong>${p[2]?`<small>${p[2]}</small>`:"<small>Standard package</small>"}<b>${money(p[1])}</b><button onclick="choosePackage(${i})">${i===state.package?"Selected":"Select"}</button></div>`).join("");
-  $("#zoneWrap").style.display=g.zone?"block":"none";
-  updateSummary();
-}
-function updateSummary(){
-  const g=current(),p=g.packages[state.package];
-  const player=$("#playerId").value.trim()||"—",zone=$("#zoneId").value.trim()||"—";
-  const discount=p[1]>=5?p[1]*.10:0,total=p[1]-discount;
-  $("#sumGame").textContent=g.name;$("#sumPlayer").textContent=player;$("#sumZone").textContent=g.zone?zone:"—";$("#sumPackage").textContent=p[0];$("#sumPrice").textContent=money(p[1]);$("#sumDiscount").textContent="-"+money(discount);$("#sumTotal").textContent=money(total);$("#miniAmount").textContent=money(total);
-}
-function chooseGame(i){state.game=i;state.package=0;renderGames();renderPackages();document.querySelector("#topup").scrollIntoView({behavior:"smooth"});}
-function choosePackage(i){state.package=i;renderPackages();}
-function renderStock(){
-  $("#stockGrid").innerHTML=games.map((g,gi)=>g.packages.map((p,pi)=>{let n=stock[`${gi}-${pi}`];let cls=n===0?"out":n<10?"low":"ok";let status=n===0?"Out of Stock":n<10?"Low Stock":"In Stock";return `<article class="stock-card"><h3>${g.icon} ${g.name}</h3><p>${p[0]} · ${money(p[1])}</p><div class="stock-number"><span>Available</span><b>${n}</b></div><div class="bar"><div class="fill" style="width:${Math.min(100,n*2)}%"></div></div><span class="stock-status ${cls}">${status}</span></article>`}).join("")).join("");
-}
-function openCheckout(){
-  const g=current(),p=g.packages[state.package],player=$("#playerId").value.trim(),zone=$("#zoneId").value.trim();
-  if(!player||g.zone&&!zone){showToast("Please enter the required player information.");return}
-  const discount=p[1]>=5?p[1]*.10:0,total=p[1]-discount;
-  const order="DT-"+Date.now().toString().slice(-9);
-  $("#modalOrder").textContent=order;$("#modalGame").textContent=g.name;$("#modalPlayer").textContent=player;$("#modalPackage").textContent=p[0];$("#modalAmount").textContent=money(total);
-  $("#miniOrder").textContent=order;$("#miniAmount").textContent=money(total);
-  $("#checkoutModal").classList.add("show");
-}
-function closeCheckout(){$("#checkoutModal").classList.remove("show")}
-function scrollToTopup(){$("#topup").scrollIntoView({behavior:"smooth"})}
+const state={cart:JSON.parse(localStorage.getItem("cb_cart")||"[]"),orders:JSON.parse(localStorage.getItem("cb_orders")||"{}")};
 
-renderGames();renderPackages();renderStock();
-$("#playerId").addEventListener("input",updateSummary);$("#zoneId").addEventListener("input",updateSummary);
-$("#checkoutBtn").addEventListener("click",openCheckout);$("#closeModal").addEventListener("click",closeCheckout);
-$("#checkoutModal").addEventListener("click",e=>{if(e.target.id==="checkoutModal")closeCheckout()});
-document.querySelectorAll(".pay").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".pay").forEach(x=>x.classList.remove("active"));b.classList.add("active");state.method=b.dataset.method;showToast(state.method+" selected")}));
-$("#modalPayments").innerHTML=["KHQR","ABA Pay","Card","Wing","TrueMoney","USDT"].map(x=>`<button class="${x==="KHQR"?"active":""}">${x}</button>`).join("");
-document.querySelectorAll(".faq").forEach(f=>f.addEventListener("click",()=>f.classList.toggle("open")));
-$("#refreshStock").addEventListener("click",()=>{Object.keys(stock).forEach(k=>stock[k]=Math.floor(Math.random()*50));renderStock();showToast("Demo stock refreshed.")});
-$("#trackBtn").addEventListener("click",()=>{let id=$("#trackInput").value.trim()||"DT-DEMO-0001";$("#trackResult").textContent=`✓ ${id}: Payment Pending → Processing → Completed (demo tracking).`});
-$("#searchInput").addEventListener("input",e=>{let q=e.target.value.toLowerCase();document.querySelectorAll(".game-card").forEach(c=>c.style.display=c.dataset.game.includes(q)?"":"none")});
-$("#menuBtn").addEventListener("click",()=>$("#mainNav").classList.toggle("open"));
-document.querySelectorAll(".side-tab").forEach(b=>b.addEventListener("click",()=>document.getElementById(b.dataset.target)?.scrollIntoView({behavior:"smooth"})));
-$("#paidBtn").addEventListener("click",()=>{closeCheckout();showToast("Demo payment received. Order is now processing.");});
+function money(n){return new Intl.NumberFormat("en-US").format(n)+" KHR"}
+function save(){localStorage.setItem("cb_cart",JSON.stringify(state.cart));localStorage.setItem("cb_orders",JSON.stringify(state.orders));updateCart()}
+function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200)}
+function stockText(s){return s==="in"?"● In Stock":s==="low"?"● Low Stock":"● Out of Stock"}
+
+function renderProducts(){
+ const q=$("#search").value.toLowerCase(), cat=$("#filter").value;
+ const list=products.filter(p=>(cat==="all"||p.category===cat)&&(p.name.toLowerCase().includes(q)||p.unit.toLowerCase().includes(q)));
+ $("#productGrid").innerHTML=list.map(p=>`
+ <article class="product-card">
+  <div class="product-top"><div class="game-icon">${p.icon}</div><div><h3>${p.name}</h3><p>${p.unit} top-up</p></div><span class="badge">${p.badge}</span></div>
+  <div class="stock ${p.stock}">${stockText(p.stock)}</div>
+  <div class="packages">${p.packages.map((x,i)=>`<button class="package" data-buy="${p.id}" data-index="${i}" ${p.stock==="out"?"disabled":""}><strong>${x[0]}</strong><span>${money(x[1])}</span></button>`).join("")}</div>
+  <button class="buy" data-buy="${p.id}" data-index="0" ${p.stock==="out"?"disabled":""}>Buy Now →</button>
+ </article>`).join("")||`<div class="status-box">No products found.</div>`;
+ document.querySelectorAll("[data-buy]").forEach(b=>b.addEventListener("click",()=>openCheckout(b.dataset.buy,Number(b.dataset.index))));
+}
+function addToCart(pid,idx,qty=1){
+ const p=products.find(x=>x.id===pid), pack=p.packages[idx];
+ const key=pid+"-"+idx;const found=state.cart.find(x=>x.key===key);
+ if(found)found.qty+=qty;else state.cart.push({key,pid,idx,qty});
+ save();toast(`${pack[0]} added to cart`);
+}
+function updateCart(){
+ $("#cartCount").textContent=state.cart.reduce((a,x)=>a+x.qty,0);
+ $("#cartItems").innerHTML=state.cart.length?state.cart.map(x=>{
+  const p=products.find(y=>y.id===x.pid),pack=p.packages[x.idx];
+  return `<div class="cart-item"><div class="cart-item-info"><b>${p.name}</b><small>${pack[0]} · ${money(pack[1])}</small></div><div class="qty"><button data-q="${x.key}" data-d="-1">−</button><span>${x.qty}</span><button data-q="${x.key}" data-d="1">+</button></div></div>`
+ }).join(""):`<p style="color:var(--muted)">Your cart is empty.</p>`;
+ const total=state.cart.reduce((a,x)=>{const p=products.find(y=>y.id===x.pid);return a+p.packages[x.idx][1]*x.qty},0);
+ $("#cartTotal").textContent=money(total);
+ document.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>{const x=state.cart.find(i=>i.key===b.dataset.q);x.qty+=Number(b.dataset.d);if(x.qty<=0)state.cart=state.cart.filter(i=>i!==x);save()});
+}
+function openCart(){$("#cartDrawer").classList.add("open");$("#overlay").classList.add("open")}
+function closeCart(){$("#cartDrawer").classList.remove("open");$("#overlay").classList.remove("open")}
+function openCheckout(pid,idx){
+ const p=products.find(x=>x.id===pid),pack=p.packages[idx];
+ $("#checkoutBody").innerHTML=`<div class="eyebrow">C-BOY STORE CHECKOUT</div><h2 class="checkout-title">${p.name}</h2><p class="checkout-sub">${pack[0]} · ${money(pack[1])}</p>
+ <div class="checkout-steps"><span class="active">1 Package</span><span class="active">2 Account</span><span>3 Payment</span></div>
+ <form id="checkoutForm" class="form-grid">
+ ${p.category==="games"?`<label>Player / Account ID<input name="player" required placeholder="Enter Player ID"></label>${p.id==="mlbb"?`<label>Server / Zone ID<input name="server" required placeholder="Enter Server / Zone ID"></label>`:""}`:`<label>Account Email / Contact<input name="player" type="email" required placeholder="Enter account email"></label>`}
+ <label>Customer contact<input name="contact" required placeholder="Telegram / phone / email"></label>
+ <div class="summary"><div><span>Product</span><strong>${p.name}</strong></div><div><span>Package</span><strong>${pack[0]}</strong></div><div><span>Total</span><strong>${money(pack[1])}</strong></div></div>
+ <button class="btn primary">Continue to QR Payment</button></form>`;
+ $("#checkoutForm").onsubmit=e=>{e.preventDefault();showPayment(pid,idx,Object.fromEntries(new FormData(e.target)))};
+ $("#checkoutModal").classList.add("open");$("#checkoutModal").setAttribute("aria-hidden","false");
+}
+function showPayment(pid,idx,data){
+ const p=products.find(x=>x.id===pid),pack=p.packages[idx];
+ $("#checkoutBody").innerHTML=`<div class="eyebrow">STEP 3 · PAYMENT</div><h2 class="checkout-title">Pay by QR</h2><p class="checkout-sub">Demo placeholder — replace this area with your actual Cambodian payment QR.</p>
+ <div class="qr-box"><img src="images/khqr.jpg" alt="KHQR payment QR code" style="display:block;width:100%;max-width:280px;margin:auto;border-radius:14px;background:#fff;padding:10px"><p style="text-align:center;color:var(--muted);font-size:12px;margin:10px 0 0">Replace images/khqr.jpg with your real KHQR before launch.</p></div>
+ <div class="summary"><div><span>Amount to pay</span><strong>${money(pack[1])}</strong></div><div><span>Customer</span><strong>${data.contact}</strong></div></div>
+ <label class="form-grid">Payment confirmation / reference<input id="paymentRef" placeholder="Optional demo reference"></label>
+ <button class="btn primary full" id="placeOrder">I Have Paid — Create Order</button>`;
+ $("#placeOrder").onclick=()=>{
+  const id="CB-"+Math.random().toString(36).slice(2,10).toUpperCase();
+  state.orders[id]={id,product:p.name,package:pack[0],amount:pack[1],data,status:"Payment Review",created:new Date().toLocaleString()};
+  save();$("#checkoutModal").classList.remove("open");toast("Order created: "+id);$("#orderId").value=id;showOrder(id);
+ };
+}
+function showOrder(id){
+ const o=state.orders[id];
+ $("#orderResult").innerHTML=o?`<div class="status-box"><b>${o.id}</b> · ${o.product} · ${o.package} · <strong>${o.status}</strong><br><small>${o.created}</small></div>`:`<div style="color:#ff7b7b">Order not found. Check your Order ID.</div>`;
+}
+$("#search").oninput=renderProducts;$("#filter").onchange=renderProducts;
+$("#cartOpen").onclick=openCart;$("#cartClose").onclick=closeCart;$("#overlay").onclick=closeCart;
+$("#checkoutClose").onclick=()=>$("#checkoutModal").classList.remove("open");
+$("#checkoutCart").onclick=()=>{if(!state.cart.length)return toast("Your cart is empty");const first=state.cart[0];openCheckout(first.pid,first.idx)};
+$("#orderForm").onsubmit=e=>{e.preventDefault();showOrder($("#orderId").value.trim().toUpperCase())};
+$("#themeToggle").onclick=()=>{document.body.classList.toggle("light");localStorage.setItem("cb_theme",document.body.classList.contains("light")?"light":"dark")};
+$("#menuToggle").onclick=()=>$("#mainNav").classList.toggle("open");
+if(localStorage.getItem("cb_theme")==="light")document.body.classList.add("light");
+for(let i=0;i<40;i++){const p=document.createElement("i");p.className="particle";p.style.left=Math.random()*100+"%";p.style.animationDelay=Math.random()*8+"s";p.style.animationDuration=5+Math.random()*8+"s";$("#particles").appendChild(p)}
+renderProducts();updateCart();
