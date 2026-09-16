@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CBOY TOPUP — fast and secure game top-ups for Mobile Legends, Free Fire, PUBG Mobile and Blood Strike.">
+  <meta property="og:title" content="CBOY TOPUP — Game Top-Up">
+  <meta property="og:description" content="Fast and secure digital game top-ups.">
+  <meta property="og:type" content="website">
+  <title>CBOY TOPUP — Fast & Secure Game Top-Up</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="loader" class="loader"><div class="loader-ring"></div><span>CBOY TOPUP</span></div>
+  <div class="bg-grid"></div><div class="orb orb-a"></div><div class="orb orb-b"></div>
+
+  <header class="navbar">
+    <a class="brand" href="#home"><span class="brand-mark">◆</span><span>CBOY<span>TOPUP</span></span></a>
+    <nav id="navLinks">
+      <a href="#home">Home</a><a href="#games">Games</a><a href="#how">How It Works</a>
+      <a href="#promotions">Promotions</a><a href="#faq">FAQ</a><a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn" id="searchBtn" aria-label="Search">⌕</button>
+      <button class="ghost-btn" id="loginBtn">Login</button>
+      <button class="primary-btn small" id="registerBtn">Register</button>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero section">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="pulse"></span> GAMING TOP-UP PLATFORM</div>
+        <h1>Power up your<br><span>game instantly.</span></h1>
+        <p>Fast, secure and convenient top-ups for your favorite games. Choose your game, enter your Player ID, and checkout in seconds.</p>
+        <div class="hero-buttons">
+          <a class="primary-btn" href="#topup">Top Up Now <b>→</b></a>
+          <a class="ghost-btn" href="#games">View Games</a>
+        </div>
+        <div class="trust-row">
+          <div><b>⚡</b><span><strong>Instant Delivery</strong><small>Fast processing</small></span></div>
+          <div><b>⌁</b><span><strong>Secure Payment</strong><small>Protected checkout</small></span></div>
+          <div><b>◉</b><span><strong>24/7 Support</strong><small>Always available</small></span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-ring ring-1"></div><div class="hero-ring ring-2"></div>
+        <div class="diamond-core">◆</div>
+        <div class="float-card card-one"><span>💎</span><div><b>+ 1,000</b><small>Diamonds</small></div></div>
+        <div class="float-card card-two"><span>⚡</span><div><b>INSTANT</b><small>Delivery</small></div></div>
+        <div class="hero-stat"><strong>4.9/5</strong><span>Player rating</span></div>
+      </div>
+    </section>
+
+    <section id="games" class="section">
+      <div class="section-head"><div><span class="eyebrow">POPULAR GAMES</span><h2>Choose your <span>game.</span></h2></div><button class="text-btn" id="allGamesBtn">View all →</button></div>
+      <div class="games-grid" id="gamesGrid"></div>
+    </section>
+
+    <section id="topup" class="section topup-section">
+      <div class="section-head center"><span class="eyebrow">QUICK CHECKOUT</span><h2>Top up in <span>seconds.</span></h2><p>Select a game, provide your Player ID and choose a package.</p></div>
+      <div class="checkout-layout">
+        <div class="panel">
+          <div class="step-title"><span>01</span><div><h3>Game & Player</h3><p>Enter the details for your account</p></div></div>
+          <label>Game</label>
+          <select id="gameSelect"></select>
+          <div id="dynamicFields"></div>
+          <div class="step-title package-title"><span>02</span><div><h3>Select Package</h3><p>Choose the amount you want</p></div></div>
+          <div class="packages" id="packages"></div>
+        </div>
+        <aside class="panel summary">
+          <div class="summary-head"><div><span class="eyebrow">ORDER SUMMARY</span><h3>Your order</h3></div><span class="secure">● Secure</span></div>
+          <div class="summary-lines">
+            <div><span>Game</span><b id="sumGame">—</b></div>
+            <div><span>Player ID</span><b id="sumPlayer">—</b></div>
+            <div><span>Package</span><b id="sumPackage">—</b></div>
+            <div><span>Price</span><b id="sumPrice">$0.00</b></div>
+            <div><span>Discount</span><b class="discount" id="sumDiscount">-$0.00</b></div>
+          </div>
+          <div class="total"><span>Total</span><strong id="sumTotal">$0.00</strong></div>
+          <button class="primary-btn wide" id="checkoutBtn">Proceed to Payment →</button>
+          <small class="demo-note">Demo checkout — no real payment is processed.</small>
+          <div class="payment-mini"><span>Accepted</span><div>KHQR</div><div>ABA</div><div>WING</div><div>USDT</div></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section payment-section">
+      <div class="section-head center"><span class="eyebrow">PAYMENT METHODS</span><h2>Simple & <span>secure.</span></h2><p>Payment methods shown are placeholders for a future backend integration.</p></div>
+      <div class="payment-grid">
+        <div>▣<b>KHQR</b><small>QR payment</small></div><div>◆<b>ABA Pay</b><small>Mobile banking</small></div>
+        <div>▤<b>Card</b><small>Credit / debit</small></div><div>◇<b>Wing</b><small>Mobile wallet</small></div>
+        <div>●<b>TrueMoney</b><small>Digital wallet</small></div><div>₮<b>USDT</b><small>Crypto</small></div>
+      </div>
+    </section>
+
+    <section id="promotions" class="section">
+      <div class="section-head"><div><span class="eyebrow">LIMITED OFFERS</span><h2>Level up your <span>rewards.</span></h2></div></div>
+      <div class="promo-grid">
+        <article class="promo p1"><span class="promo-tag">NEW PLAYER</span><h3>First Top-Up<br>Bonus</h3><p>Get an extra bonus on your first demo order.</p><button class="text-btn" onclick="scrollToTopup()">Claim offer →</button></article>
+        <article class="promo p2"><span class="promo-tag">WEEKEND</span><h3>Weekend<br>Discount</h3><p>Special promotional pricing on selected packages.</p><button class="text-btn" onclick="scrollToTopup()">Shop now →</button></article>
+        <article class="promo p3"><span class="promo-tag">VIP</span><h3>VIP Customer<br>Rewards</h3><p>Earn rewards as your demo order history grows.</p><button class="text-btn" onclick="scrollToTopup()">Explore →</button></article>
+        <article class="promo p4"><span class="promo-tag">EVENT</span><h3>Special Game<br>Events</h3><p>Watch this space for seasonal top-up events.</p><button class="text-btn" onclick="scrollToTopup()">View games →</button></article>
+      </div>
+    </section>
+
+    <section id="how" class="section">
+      <div class="section-head center"><span class="eyebrow">HOW IT WORKS</span><h2>Top up <span>without the hassle.</span></h2></div>
+      <div class="steps">
+        <div><i>01</i><b>Choose Game</b><p>Select your favorite game from our catalog.</p></div>
+        <div><i>02</i><b>Enter Player ID</b><p>Provide the ID used by your game account.</p></div>
+        <div><i>03</i><b>Select Package</b><p>Pick the currency package that fits you.</p></div>
+        <div><i>04</i><b>Pay & Receive</b><p>Complete checkout and receive your top-up.</p></div>
+      </div>
+    </section>
+
+    <section class="section benefits">
+      <div class="section-head center"><span class="eyebrow">WHY CBOY TOPUP</span><h2>Built for <span>players.</span></h2></div>
+      <div class="benefit-grid">
+        <div>⚡<b>Fast Delivery</b><p>Designed for quick order processing.</p></div><div>🔒<b>Secure Checkout</b><p>No sensitive payment data is stored by this demo.</p></div>
+        <div>◇<b>Competitive Pricing</b><p>Flexible packages and promotional offers.</p></div><div>◉<b>24/7 Support</b><p>Support channels ready for integration.</p></div>
+        <div>▦<b>Multiple Payments</b><p>Popular regional methods shown in one place.</p></div><div>⌁<b>Order Tracking</b><p>Track your demo order status anytime.</p></div>
+      </div>
+    </section>
+
+    <section id="tracking" class="section tracking">
+      <div class="tracking-box">
+        <div><span class="eyebrow">ORDER TRACKING</span><h2>Where's your <span>order?</span></h2><p>Enter a demo Order ID to see the tracking interface.</p></div>
+        <div class="track-form"><input id="trackInput" placeholder="e.g. DT-20260916-1234"><button class="primary-btn" id="trackBtn">Track Order</button></div>
+        <div id="trackResult" class="track-result hidden"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head center"><span class="eyebrow">PLAYER FEEDBACK</span><h2>Loved by <span>gamers.</span></h2></div>
+      <div class="reviews">
+        <article><div class="avatar">K</div><div class="stars">★★★★★</div><p>“Clean checkout experience and very easy to understand.”</p><small>Ken • Mobile Legends</small></article>
+        <article><div class="avatar">S</div><div class="stars">★★★★★</div><p>“I like how quickly I can find the package I need.”</p><small>Sokha • Free Fire</small></article>
+        <article><div class="avatar">M</div><div class="stars">★★★★★</div><p>“The order tracking concept is simple and useful.”</p><small>Min • PUBG Mobile</small></article>
+      </div>
+      <p class="demo-note center-note">Reviews above are placeholder/demo content.</p>
+    </section>
+
+    <section id="faq" class="section faq-section">
+      <div class="section-head center"><span class="eyebrow">FAQ</span><h2>Frequently asked <span>questions.</span></h2></div>
+      <div class="faq">
+        <button>How long does delivery take?<span>+</span></button><div>In this frontend demo, checkout is simulated. A real delivery time depends on the connected top-up provider and backend.</div>
+        <button>Where can I find my Player ID?<span>+</span></button><div>Open the relevant game profile/account screen and look for the account or Player ID shown there.</div>
+        <button>What happens if I enter the wrong ID?<span>+</span></button><div>Do not proceed until the ID is verified. A production system should validate order details before fulfillment.</div>
+        <button>Which payment methods are supported?<span>+</span></button><div>This demo displays KHQR, ABA Pay, cards, Wing, TrueMoney and USDT as placeholder payment options.</div>
+        <button>Can I get a refund?<span>+</span></button><div>A real refund policy must be defined by the store operator and the payment/top-up provider.</div>
+        <button>How can I contact support?<span>+</span></button><div>Use the placeholder support channels in the Contact section; replace them with your verified business accounts.</div>
+      </div>
+    </section>
+
+    <section id="contact" class="section contact">
+      <div><div class="section-head"><span class="eyebrow">SUPPORT</span><h2>Need <span>help?</span></h2><p>Send a message through the demo form or connect your real support channels later.</p></div>
+        <div class="support-links"><a href="#" onclick="demoLink(event)">✈ Telegram <small>@your_support</small></a><a href="#" onclick="demoLink(event)">f Facebook <small>DiamondTopUp</small></a><a href="mailto:support@example.com">✉ Email <small>support@example.com</small></a></div></div>
+      <form class="contact-form" id="contactForm"><input required placeholder="Your name"><input type="email" required placeholder="Email address"><textarea required placeholder="How can we help?"></textarea><button class="primary-btn" type="submit">Send Message →</button></form>
+    </section>
+  </main>
+
+  <footer><div class="footer-main"><a class="brand" href="#home"><span class="brand-mark">◆</span><span>Diamond<span>TopUp</span></span></a><p>Fast, secure and convenient game top-ups. Frontend demo for future production integration.</p>
+    <div><b>Quick Links</b><a href="#games">Games</a><a href="#how">How It Works</a><a href="#promotions">Promotions</a></div>
+    <div><b>Support</b><a href="#faq">FAQ</a><a href="#contact">Contact</a><a href="#tracking">Track Order</a></div>
+    <div><b>Legal</b><a href="#" onclick="demoLink(event)">Terms & Conditions</a><a href="#" onclick="demoLink(event)">Privacy Policy</a><a href="#" onclick="demoLink(event)">Refund Policy</a></div>
+  </div><div class="footer-bottom">© <span id="year"></span> DiamondTopUp. Demo website. All rights reserved.<span>Secure • Fast • Gamer-first</span></div></footer>
+
+  <div class="modal hidden" id="modal"><div class="modal-card"><button class="modal-close" id="modalClose">×</button><span class="eyebrow">DEMO CHECKOUT</span><h2>Ready to <span>pay?</span></h2><p>No real payment is processed. This simulates the handoff to a payment gateway.</p><div class="modal-order" id="modalOrder"></div><div class="modal-methods"><button>KHQR</button><button>ABA Pay</button><button>Card</button><button>USDT</button></div><button class="primary-btn wide" id="demoPayBtn">Simulate Payment</button><small class="demo-note">Never enter card numbers or secrets into this demo.</small></div></div>
+  <div class="toast" id="toast"></div>
+  <div class="mobile-cta"><a href="#topup">💎 Top Up Now</a></div>
+  <script src="script.js"></script>
+</body>
+</html>
